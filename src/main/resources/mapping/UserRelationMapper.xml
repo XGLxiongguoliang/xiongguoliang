@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.network.mapper.UserRelationMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.network.domain.UserRelation">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="masterid" jdbcType="INTEGER" property="masterId" />
+        <result column="servantid" jdbcType="INTEGER" property="servantId" />
+        <result column="relationid" jdbcType="INTEGER" property="relationId" />
+    </resultMap>
+
+    <insert id="addUserRelation" parameterType="com.example.network.domain.UserRelation">
+        insert into userrelation(masterid, servantid, relationid) values(#{masterId}, #{servantId}, #{relationId})
+    </insert>
+
+    <select id="getUserRelationList" resultMap="BaseResultMap">
+      select * from userrelation where flag =0
+    </select>
+
+    <select id="selectUserRelationByMasterId" parameterType="Integer" resultMap="BaseResultMap">
+        select * from userrelation where (masterid = #{masterId} or servantid = #{masterId}) and flag =0
+    </select>
+
+    <select id="getUserRelationPageList" resultType="com.example.network.domain.vo.UserRelationVO">
+      select
+          t1.id,
+          t1.masterid,
+          t1.servantid,
+          t1.relationid,
+          t2.name as masterName,
+          t3.name as servantName,
+          t4.name as relationName
+      from userrelation t1
+      left join user t2 on t2.id = t1.masterid
+      left join user t3 on t3.id = t1.servantid
+      left join relation t4 on t4.id = t1.relationid
+      where t1.flag =0
+    </select>
+
+    <delete id="batchDelete" parameterType="list">
+        delete from userrelation
+        where id in
+        (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+
+    <update id="batchUpdate" parameterType="list">
+        update userrelation
+        set flag = 1
+        where id in
+        (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </update>
+
+</mapper>
