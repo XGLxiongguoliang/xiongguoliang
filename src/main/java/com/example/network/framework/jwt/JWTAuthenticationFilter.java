@@ -3,7 +3,6 @@ package com.example.network.framework.jwt;
 import com.example.network.domain.UserInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -12,14 +11,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -102,17 +99,5 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setHeader("token", JwtTokenUtils.TOKEN_PREFIX + token);
         //这里我还将该用户的id进行返回了
         response.setIntHeader("id",jwtUser.getId().intValue());
-    }
-
-    //配置失败返回的信息，当然成功的也可以返回思路一样，重写successful，这里我就不写了
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        System.out.println("用户登陆失败  AjaxAuthFailHandler");
-        response.setContentType("application/json;charset=utf-8");
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        PrintWriter out = response.getWriter();
-        out.write("{\"status\":\"error\",\"msg\":\"请检查用户名、密码或验证码是否正确\"}");
-        out.flush();
-        out.close();
     }
 }

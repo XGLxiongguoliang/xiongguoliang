@@ -19,17 +19,13 @@ public class JwtTokenUtils {
     public static final String TOKEN_PREFIX = "Bearer ";
     private static final String SECRET = "jwtsecretdemo";
     private static final String ISS = "echisan";
-
     // 角色的key
     private static final String ROLE_CLAIMS = "rol";
-
     // 过期时间是3600秒，既是1个小时
     private static final long EXPIRATION = 3600L;
 
-
     // 创建token
     public static String createToken(String username,String role) {
-
         long expiration =EXPIRATION;
         HashMap<String, Object> map = new HashMap<>();
         map.put(ROLE_CLAIMS, role);

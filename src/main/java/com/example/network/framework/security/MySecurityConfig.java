@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -88,8 +87,6 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/login/login").permitAll()
 
-                //.antMatchers("/User").hasRole("USER")
-                // .antMatchers("/Admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
@@ -100,9 +97,6 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .successHandler(new AjaxAuthSuccessHandler())
                 .failureHandler(new AjaxAuthFailHandler())
-                //固定名字，其实默认也是username跟password，这里也可以不写
-                //.usernameParameter("username")
-                //.passwordParameter("password")
                 //设置自己的登录界面（如果不设置，将会是自带的登录界面这里我们使用自定义的登录界面）
                 .loginPage("/login/login")
                 //表单提交的url
