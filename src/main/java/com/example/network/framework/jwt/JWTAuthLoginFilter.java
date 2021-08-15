@@ -26,11 +26,11 @@ import java.util.Collection;
  * @auther Mr.Xiong
  * @create 2021-08-14 13:29:28
  */
-public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JWTAuthLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JWTAuthLoginFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
         //设置登录请求的url
         super.setFilterProcessesUrl("/login/login");

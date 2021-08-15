@@ -20,5 +20,5 @@ public interface UserMapper {
 
     UserInfo getUserByAccountAndPassword(UserInfo user);
 
-    UserInfo queryUserByAccount(String account);
+    UserInfo queryUserByAccount(String username);
 }

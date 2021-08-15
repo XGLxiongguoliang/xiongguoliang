@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfo queryUserByAccount(String account) {
-        return userMapper.queryUserByAccount(account);
+    public UserInfo queryUserByAccount(String username) {
+        return userMapper.queryUserByAccount(username);
     }
 }

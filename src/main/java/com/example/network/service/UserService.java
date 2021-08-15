@@ -26,5 +26,5 @@ public interface UserService {
 
     UserInfo authUser(UserInfo user);
 
-    UserInfo queryUserByAccount(String account);
+    UserInfo queryUserByAccount(String username);
 }

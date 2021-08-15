@@ -1,6 +1,6 @@
 package com.example.network.framework.security;
 
-import com.example.network.framework.jwt.JWTAuthenticationFilter;
+import com.example.network.framework.jwt.JWTAuthLoginFilter;
 import com.example.network.framework.jwt.JWTAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -89,7 +89,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilter(new JWTAuthLoginFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);    //禁用session
 

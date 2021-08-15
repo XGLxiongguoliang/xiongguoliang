@@ -6,7 +6,7 @@
         <result column="id" jdbcType="INTEGER" property="id" />
         <result column="name" jdbcType="VARCHAR" property="username" />
         <result column="age" jdbcType="INTEGER" property="age" />
-        <result column="account" jdbcType="VARCHAR" property="account" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
         <result column="password" jdbcType="VARCHAR" property="password" />
         <result column="flag" jdbcType="INTEGER" property="flag" />
     </resultMap>
@@ -45,20 +45,15 @@
     </update>
 
     <select id="getUserByAccountAndPassword" parameterType="com.example.network.domain.UserInfo" resultType="com.example.network.domain.UserInfo">
-        select * from user where account = #{account} and password = #{password} and flag = 0
+        select * from user where username = #{username} and password = #{password} and flag = 0
     </select>
 
     <select id="queryUserByAccount" parameterType="string" resultType="com.example.network.domain.UserInfo">
         select
-            id,
-            age,
-            flag,
-            account as username,
-            password,
-            role
+            *
         from
           user
         where
-          account = #{account} and flag = 0
+          username = #{username} and flag = 0
     </select>
  </mapper>
