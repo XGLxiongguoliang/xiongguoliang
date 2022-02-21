@@ -47,7 +47,7 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping("/addUser")
-        public int addUser(@RequestBody UserInfo user) {
+    public int addUser(@RequestBody UserInfo user) {
         if (user.getId() != null) {
             userService.updateUser(user);
         } else {

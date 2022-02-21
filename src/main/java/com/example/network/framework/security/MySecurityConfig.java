@@ -35,7 +35,7 @@ import java.io.PrintWriter;
  * @create 2021-05-13 21:37:43
  */
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -45,7 +45,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     private class AjaxAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-            System.out.println("用户[" + SecurityContextHolder.getContext().getAuthentication().getPrincipal() +"]登陆成功！");
+            System.out.println("用户[" + SecurityContextHolder.getContext().getAuthentication().getPrincipal() + "]登陆成功！");
             response.setContentType("application/json;charset=utf-8");
             PrintWriter out = response.getWriter();
             out.write("{\"status\":\"ok\",\"msg\":\"登录成功\"}");
@@ -76,8 +76,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       auth.userDetailsService(userDetailsService)
-               .passwordEncoder(passwordEncoder());
+        auth.userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -102,7 +102,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 //表单提交的url
                 .loginProcessingUrl("/login/login");
 
-   }
+    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

@@ -25,8 +25,8 @@ public class JwtTokenUtils {
     private static final long EXPIRATION = 3600L;
 
     // 创建token
-    public static String createToken(String username,String role) {
-        long expiration =EXPIRATION;
+    public static String createToken(String username, String role) {
+        long expiration = EXPIRATION;
         HashMap<String, Object> map = new HashMap<>();
         map.put(ROLE_CLAIMS, role);
         return Jwts.builder()
@@ -41,12 +41,12 @@ public class JwtTokenUtils {
     }
 
     // 从token中获取用户名
-    public static String getUsername(String token){
+    public static String getUsername(String token) {
         return getTokenBody(token).getSubject();
     }
 
     // 获取用户角色
-    public static String getUserRole(String token){
+    public static String getUserRole(String token) {
         return (String) getTokenBody(token).get(ROLE_CLAIMS);
     }
 
@@ -59,7 +59,7 @@ public class JwtTokenUtils {
         }
     }
 
-    private static Claims getTokenBody(String token){
+    private static Claims getTokenBody(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET)
                 .parseClaimsJws(token)

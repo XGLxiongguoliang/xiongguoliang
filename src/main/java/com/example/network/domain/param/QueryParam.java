@@ -15,7 +15,7 @@ public class QueryParam<T> implements Serializable {
     private PageObject<T> pageObject;
 
     public QueryParam(T entity, PageObject<T> pageObject) {
-        this.entity = entity ;
+        this.entity = entity;
         this.pageObject = pageObject;
     }
 

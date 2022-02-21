@@ -51,16 +51,16 @@ public class UserRelationServiceImpl implements UserRelationService {
         List<UserRelation> userRelationList = userRelationMapper.getUserRelationList();
         List<Relation> relationList = relationMapper.queryAll();
 
-        Map<String,UserRelation> userRelationMap = new HashMap<String,UserRelation>();
-        Map<String,UserRelation> tempUserRelationMap = new HashMap<String,UserRelation>();
+        Map<String, UserRelation> userRelationMap = new HashMap<String, UserRelation>();
+        Map<String, UserRelation> tempUserRelationMap = new HashMap<String, UserRelation>();
         Map<Integer, UserInfo> userMap = new HashMap<Integer, UserInfo>();
-        Map<Integer,String> relationMap = new HashMap<Integer,String>();
+        Map<Integer, String> relationMap = new HashMap<Integer, String>();
 
         userRelationList.forEach(item -> {
-            userRelationMap.put(item.getId() + "-" + item.getMasterId(),item);
+            userRelationMap.put(item.getId() + "-" + item.getMasterId(), item);
         });
         userList.forEach(item -> {
-            userMap.put(item.getId(),item);
+            userMap.put(item.getId(), item);
         });
         relationList.forEach(item -> {
             relationMap.put(item.getId(), item.getName());
@@ -82,18 +82,18 @@ public class UserRelationServiceImpl implements UserRelationService {
         return resultMap;
     }
 
-    private void findUserRelations(List<UserInfo> users, List<UserRelation> userRelations, Map<String,UserRelation> userRelationMap, Map<Integer, UserInfo> userMap, Integer id, Map<String,UserRelation> tempUserRelationMap) {
+    private void findUserRelations(List<UserInfo> users, List<UserRelation> userRelations, Map<String, UserRelation> userRelationMap, Map<Integer, UserInfo> userMap, Integer id, Map<String, UserRelation> tempUserRelationMap) {
         List<UserRelation> tempList = userRelationMapper.selectUserRelationByMasterId(id);
         if (tempList.isEmpty()) {
             return;
         } else {
-            tempList.forEach(temp->{
+            tempList.forEach(temp -> {
                 if (userRelationMap.containsKey(temp.getId() + "-" + id)) {
                     addUserAndUserRelation(temp, users, userRelations, userRelationMap, userMap, id, tempUserRelationMap);
                     Iterator entries = userRelationMap.entrySet().iterator();
                     while (entries.hasNext()) {
                         Map.Entry entry = (Map.Entry) entries.next();
-                        UserRelation userRelation = (UserRelation)entry.getValue();
+                        UserRelation userRelation = (UserRelation) entry.getValue();
                         if (temp.getServantId() == userRelation.getMasterId()) {
                             addUserAndUserRelation(userRelation, users, userRelations, userRelationMap, userMap, userRelation.getMasterId(), tempUserRelationMap);
                             this.findUserRelations(users, userRelations, userRelationMap, userMap, temp.getServantId(), tempUserRelationMap);
@@ -115,7 +115,7 @@ public class UserRelationServiceImpl implements UserRelationService {
         }
     }
 
-    private void addUserAndUserRelation(UserRelation temp, List<UserInfo> users, List<UserRelation> userRelations, Map<String,UserRelation> userRelationMap, Map<Integer, UserInfo> userMap, Integer id, Map<String,UserRelation> tempUserRelationMap) {
+    private void addUserAndUserRelation(UserRelation temp, List<UserInfo> users, List<UserRelation> userRelations, Map<String, UserRelation> userRelationMap, Map<Integer, UserInfo> userMap, Integer id, Map<String, UserRelation> tempUserRelationMap) {
         if (userRelationMap.get(temp.getId() + "-" + id) != null) {
             userRelations.add(userRelationMap.get(temp.getId() + "-" + id));
             tempUserRelationMap.put(temp.getId() + "-" + id, userRelationMap.get(temp.getId() + "-" + id));
@@ -141,7 +141,7 @@ public class UserRelationServiceImpl implements UserRelationService {
 
         List<UserRelationVO> userRelationVOList = new ArrayList<UserRelationVO>();
 
-        Map<Integer,String> relationMap = new HashMap<Integer,String>();
+        Map<Integer, String> relationMap = new HashMap<Integer, String>();
 
         relations.forEach(item -> {
             relationMap.put(item.getId(), item.getName());

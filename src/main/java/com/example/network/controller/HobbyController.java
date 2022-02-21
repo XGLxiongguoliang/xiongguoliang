@@ -40,7 +40,7 @@ public class HobbyController {
 
     @ResponseBody
     @RequestMapping("/addHobby")
-        public int addHobby(@RequestBody Hobby hobby) {
+    public int addHobby(@RequestBody Hobby hobby) {
         if (hobby.getId() != null) {
             hobby.setUpdateTime(new Date());
             hobbyService.updateHobby(hobby);

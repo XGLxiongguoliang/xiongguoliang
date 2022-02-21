@@ -49,7 +49,7 @@ public class JWTAuthLoginFilter extends UsernamePasswordAuthenticationFilter {
                     new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword(), new ArrayList<>()));
 
             //密码错误时抛出异常
-        }catch (BadCredentialsException b){
+        } catch (BadCredentialsException b) {
             System.out.println("密码错误");
             try {
                 response.setCharacterEncoding("UTF-8");
@@ -61,16 +61,14 @@ public class JWTAuthLoginFilter extends UsernamePasswordAuthenticationFilter {
             }
             return null;
             //无此用户时抛出异常
-        }catch (InternalAuthenticationServiceException i){
+        } catch (InternalAuthenticationServiceException i) {
             System.out.println("没有此用户");
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("xxx");
             return null;
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -98,6 +96,6 @@ public class JWTAuthLoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println(token);
         response.setHeader("token", JwtTokenUtils.TOKEN_PREFIX + token);
         //这里我还将该用户的id进行返回了
-        response.setIntHeader("id",jwtUser.getId().intValue());
+        response.setIntHeader("id", jwtUser.getId().intValue());
     }
 }

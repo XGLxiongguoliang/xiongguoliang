@@ -30,7 +30,7 @@ public class PageObject<T> implements Serializable {
         this.pageSize = pageSize;
         this.rowCount = rowCount;
         this.records = new ArrayList<>(records);
-        this.pageCount = (rowCount-1)/pageSize + 1;
+        this.pageCount = (rowCount - 1) / pageSize + 1;
         this.param = param;
     }
 
