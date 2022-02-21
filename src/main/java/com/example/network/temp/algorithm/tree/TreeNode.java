@@ -1,4 +1,4 @@
-package com.example.network.temp.tree;
+package com.example.network.temp.algorithm.tree;
 
 import org.springframework.util.CollectionUtils;
 
