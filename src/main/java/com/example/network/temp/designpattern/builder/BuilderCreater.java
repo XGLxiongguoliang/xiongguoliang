@@ -16,8 +16,8 @@ public class BuilderCreater implements Builder {
 
     @Override
     public void buildQiang() {
-        System.out.println("构建屋顶");
-        house.setQiang("屋顶");
+        System.out.println("构建墙");
+        house.setQiang("墙");
     }
 
     @Override
