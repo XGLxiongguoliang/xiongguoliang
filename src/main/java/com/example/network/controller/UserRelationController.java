@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/userrelation")
-public class userRelationController {
+public class UserRelationController {
 
     @Autowired
     private UserRelationService userRelationService;

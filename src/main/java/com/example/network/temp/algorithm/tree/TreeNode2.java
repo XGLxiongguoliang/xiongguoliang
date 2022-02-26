@@ -1,4 +1,4 @@
-package com.example.network.temp.tree;
+package com.example.network.temp.algorithm.tree;
 
 import java.util.ArrayList;
 import java.util.List;

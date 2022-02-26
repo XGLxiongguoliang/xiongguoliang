@@ -1,4 +1,4 @@
-package com.example.network.temp.algorithm;
+package com.example.network.temp.algorithm.sort;
 
 import java.util.Arrays;
 
