@@ -7,4 +7,13 @@ package com.example.network.temp.designpattern.singleton;
  * @create 2022-02-26 10:47:02
  */
 public class HungrySingleton {
+    private static final HungrySingleton instance = new HungrySingleton();
+
+    private HungrySingleton() {
+
+    }
+
+    public static synchronized HungrySingleton getInstance() {
+        return instance;
+    }
 }
