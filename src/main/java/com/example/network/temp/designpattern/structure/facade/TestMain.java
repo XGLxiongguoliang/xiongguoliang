@@ -1,4 +1,4 @@
-package com.example.network.temp.designpattern.facade;
+package com.example.network.temp.designpattern.structure.facade;
 
 import com.example.network.temp.designpattern.factory.demo1.PhoneFactory;
 

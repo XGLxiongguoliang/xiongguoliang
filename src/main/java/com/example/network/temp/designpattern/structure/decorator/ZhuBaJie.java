@@ -1,4 +1,4 @@
-package com.example.network.temp.designpattern.decorator;
+package com.example.network.temp.designpattern.structure.decorator;
 
 public class ZhuBaJie extends Change {
     public ZhuBaJie(SunWukong sunWukong) {

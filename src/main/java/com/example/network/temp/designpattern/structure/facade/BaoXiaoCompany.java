@@ -1,4 +1,4 @@
-package com.example.network.temp.designpattern.facade;
+package com.example.network.temp.designpattern.structure.facade;
 
 public class BaoXiaoCompany {
     private CheBaoXian cheBaoXian = new CheBaoXian();
