@@ -16,7 +16,10 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -44,7 +47,7 @@ public class JWTAuthLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // 从输入流中获取到登录的信息
         try {
-            UserInfo loginUser = new ObjectMapper().readValue(request.getInputStream(), UserInfo.class);
+            UserInfo loginUser = new ObjectMapper().readValue(requestParams(request), UserInfo.class);
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword(), new ArrayList<>()));
 
@@ -97,5 +100,18 @@ public class JWTAuthLoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setHeader("token", JwtTokenUtils.TOKEN_PREFIX + token);
         //这里我还将该用户的id进行返回了
         response.setIntHeader("id", jwtUser.getId().intValue());
+    }
+
+    public String requestParams(HttpServletRequest request) throws IOException {
+        //获取post参数
+        StringBuffer sb = new StringBuffer() ;
+        InputStream is = request.getInputStream();
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        String s = "" ;
+        while((s=br.readLine())!=null){
+            sb.append(s) ;
+        }
+        return sb.toString();
     }
 }

@@ -2,18 +2,18 @@ server:
   port: 8800
 
 spring:
+  main:
+    allow-circular-references: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: 571314
-    url: jdbc:mysql://127.0.0.1:3306/network?characterEncoding=utf-8&serverTimezone=UTC&useSSL=false
+    password: 123456
+    url: jdbc:mysql://8.140.139.185:3306/network?characterEncoding=utf-8&serverTimezone=UTC&useSSL=false
   mvc:
     view:
       prefix: classpath:/templates/
       suffix: .html
     static-path-pattern: /**
-  resources:
-    static-locations: classpath:/static/
   devtools:
     restart:
       enabled: true
@@ -21,6 +21,9 @@ spring:
   thymeleaf:
     mode: HTML
     prefix: classpath:/templates/
+  web:
+    resources:
+      static-locations: classpath:/static/
 
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
@@ -38,3 +41,10 @@ logging:
   fileUrl: log/myspringboot.log
   #采用绝对路径方式将日志文件输出到【/Users/wang/Downloads/myspringboot.log】
   #file: /Users/wang/Downloads/myspringboot.log
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
