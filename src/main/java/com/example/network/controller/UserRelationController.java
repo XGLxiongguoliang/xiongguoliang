@@ -35,8 +35,8 @@ public class UserRelationController {
     }
 
     @ResponseBody
-    @RequestMapping("/getUserRelationListByUser/{id}")
-    public Map<String, List> getUserRelationListByUser(@PathVariable Integer id) {
+    @RequestMapping("/getUserRelationListByUser")
+    public Map<String, List> getUserRelationListByUser(@RequestBody Integer id) {
         Map<String, List> map = userRelationService.getUserRelationListByUser(id);
         return map;
     }

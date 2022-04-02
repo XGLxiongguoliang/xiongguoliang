@@ -17,7 +17,7 @@ public interface UserRelationMapper {
 
     List<UserRelation> getUserRelationList();
 
-    List<UserRelation> selectUserRelationByMasterId(Integer masterId);
+    List<UserRelation> selectUserRelationByUserId(Integer userId);
 
     List<UserRelationVO> getUserRelationPageList();
 

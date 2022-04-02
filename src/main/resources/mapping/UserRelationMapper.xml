@@ -14,11 +14,11 @@
     </insert>
 
     <select id="getUserRelationList" resultMap="BaseResultMap">
-      select * from userrelation where flag =0
+      select * from userrelation where flag = 0
     </select>
 
-    <select id="selectUserRelationByMasterId" parameterType="Integer" resultMap="BaseResultMap">
-        select * from userrelation where (masterid = #{masterId} or servantid = #{masterId}) and flag =0
+    <select id="selectUserRelationByUserId" parameterType="Integer" resultMap="BaseResultMap">
+        select * from userrelation where (masterid = #{userId} or servantid = #{userId}) and flag = 0
     </select>
 
     <select id="getUserRelationPageList" resultType="com.example.network.domain.vo.UserRelationVO">

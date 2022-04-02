@@ -42,93 +42,56 @@ public class UserRelationServiceImpl implements UserRelationService {
 
     @Override
     public Map<String, List> getUserRelationListByUser(Integer id) {
+        //总得返回结果
         Map<String, List> resultMap = new HashMap<>();
 
-        List<UserInfo> users = new ArrayList<UserInfo>();
-        List<UserRelation> userRelations = new ArrayList<UserRelation>();
+        //查询全量用户
+        List<UserInfo> users = userMapper.queryAll();
+        //查询全量关系
+        List<Relation> relations = relationMapper.queryAll();
 
-        List<UserInfo> userList = userMapper.queryAll();
-        List<UserRelation> userRelationList = userRelationMapper.getUserRelationList();
-        List<Relation> relationList = relationMapper.queryAll();
+        //涉及到该查询用户的关系
+        List<UserRelation> userRelations = userRelationMapper.selectUserRelationByUserId(id);
 
-        Map<String, UserRelation> userRelationMap = new HashMap<String, UserRelation>();
-        Map<String, UserRelation> tempUserRelationMap = new HashMap<String, UserRelation>();
-        Map<Integer, UserInfo> userMap = new HashMap<Integer, UserInfo>();
-        Map<Integer, String> relationMap = new HashMap<Integer, String>();
+        //创建返回的用户集和用户相关的关系集
+        List<UserRelationVO> userRelationVOList = new ArrayList<>();
+        List<UserInfo> resultUsers = new ArrayList<>();
 
-        userRelationList.forEach(item -> {
-            userRelationMap.put(item.getId() + "-" + item.getMasterId(), item);
-        });
-        userList.forEach(item -> {
-            userMap.put(item.getId(), item);
-        });
-        relationList.forEach(item -> {
+        Map<Integer, String> relationMap = new HashMap<>();
+        relations.forEach(item -> {
             relationMap.put(item.getId(), item.getName());
         });
 
-        findUserRelations(users, userRelations, userRelationMap, userMap, id, tempUserRelationMap);
-        resultMap.put("users", users);
-
-        List<UserRelationVO> userRelationVOList = new ArrayList<UserRelationVO>();
+        List<Integer> somePeople = new ArrayList<>();
         userRelations.forEach(item -> {
+            // 整合用户关系
             UserRelationVO userRelationVO = new UserRelationVO();
             BeanUtils.copyProperties(item, userRelationVO);
             userRelationVOList.add(userRelationVO);
+
+            // 整合相关用户
+            if (!somePeople.contains(item.getMasterId())) {
+                somePeople.add(item.getMasterId());
+            }
+            if (!somePeople.contains(item.getServantId())) {
+                somePeople.add(item.getServantId());
+            }
         });
+
+        users.forEach(a -> {
+            if (somePeople.contains(a.getId())) {
+                resultUsers.add(a);
+            }
+        });
+
         userRelationVOList.forEach(item -> {
             item.setRelationName(relationMap.get(item.getRelationId()));
         });
+
+        resultMap.put("users", resultUsers);
         resultMap.put("userRelationVOList", userRelationVOList);
+
         return resultMap;
-    }
-
-    private void findUserRelations(List<UserInfo> users, List<UserRelation> userRelations, Map<String, UserRelation> userRelationMap, Map<Integer, UserInfo> userMap, Integer id, Map<String, UserRelation> tempUserRelationMap) {
-        List<UserRelation> tempList = userRelationMapper.selectUserRelationByMasterId(id);
-        if (tempList.isEmpty()) {
-            return;
-        } else {
-            tempList.forEach(temp -> {
-                if (userRelationMap.containsKey(temp.getId() + "-" + id)) {
-                    addUserAndUserRelation(temp, users, userRelations, userRelationMap, userMap, id, tempUserRelationMap);
-                    Iterator entries = userRelationMap.entrySet().iterator();
-                    while (entries.hasNext()) {
-                        Map.Entry entry = (Map.Entry) entries.next();
-                        UserRelation userRelation = (UserRelation) entry.getValue();
-                        if (temp.getServantId() == userRelation.getMasterId()) {
-                            addUserAndUserRelation(userRelation, users, userRelations, userRelationMap, userMap, userRelation.getMasterId(), tempUserRelationMap);
-                            this.findUserRelations(users, userRelations, userRelationMap, userMap, temp.getServantId(), tempUserRelationMap);
-                        } else if (temp.getServantId() == userRelation.getServantId()) {
-                            if (tempUserRelationMap.containsKey(temp.getId() + "-" + userRelation.getServantId())) {
-                                continue;
-                            }
-                            addUserAndUserRelation(userRelation, users, userRelations, userRelationMap, userMap, userRelation.getServantId(), tempUserRelationMap);
-                            this.findUserRelations(users, userRelations, userRelationMap, userMap, temp.getServantId(), tempUserRelationMap);
-                        } else {
-                            return;
-                        }
-                    }
-                } else {
-                    return;
-                }
-
-            });
-        }
-    }
-
-    private void addUserAndUserRelation(UserRelation temp, List<UserInfo> users, List<UserRelation> userRelations, Map<String, UserRelation> userRelationMap, Map<Integer, UserInfo> userMap, Integer id, Map<String, UserRelation> tempUserRelationMap) {
-        if (userRelationMap.get(temp.getId() + "-" + id) != null) {
-            userRelations.add(userRelationMap.get(temp.getId() + "-" + id));
-            tempUserRelationMap.put(temp.getId() + "-" + id, userRelationMap.get(temp.getId() + "-" + id));
-        }
-        userRelationMap.remove(userRelationMap.get(temp.getId() + "-" + id));
-        if (userMap.containsKey(temp.getMasterId())) {
-            users.add(userMap.get(temp.getMasterId()));
-            userMap.remove(temp.getMasterId());
-        }
-        if (userMap.containsKey(temp.getServantId())) {
-            users.add(userMap.get(temp.getServantId()));
-            userMap.remove(temp.getServantId());
-        }
     }
 
     @Override
