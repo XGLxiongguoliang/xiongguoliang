@@ -2,6 +2,9 @@ package com.example.network.temp.algorithm.sort;
 
 import java.util.Arrays;
 
+/**
+ * 希尔排序
+ */
 public class ShellSort {
     public static void main(String[] args) {
         int[] array = new int[]{1, 6, 7, 3, 2, 77, 8, 64, 54, 44, 22};

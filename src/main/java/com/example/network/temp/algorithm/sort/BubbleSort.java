@@ -2,6 +2,9 @@ package com.example.network.temp.algorithm.sort;
 
 import java.util.Arrays;
 
+/**
+ * 冒泡排序
+ */
 public class BubbleSort {
     public static void main(String[] args) {
         int[] array = new int[]{1, 2, 5, 4, 9, 6, 66, 55, 99, 100, 3};
