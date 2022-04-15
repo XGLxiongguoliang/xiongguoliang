@@ -2,6 +2,9 @@ package com.example.network.temp.algorithm.sort;
 
 import java.util.Arrays;
 
+/**
+ * 选择排序
+ */
 public class SelectSort {
     public static void main(String[] args) {
         Integer[] array = new Integer[]{1, 2, 5, 4, 9, 6, 66, 55, 99, 100, 3};

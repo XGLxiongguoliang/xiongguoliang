@@ -7,32 +7,28 @@ import java.util.Arrays;
  */
 public class BubbleSort {
     public static void main(String[] args) {
-        int[] array = new int[]{1, 2, 5, 4, 9, 6, 66, 55, 99, 100, 3};
+        Integer[] array = new Integer[]{1, 2, 5, 4, 9, 6, 66, 55, 99, 100, 3};
 
         System.out.println("asc" + Arrays.toString(ascSort(array)));
         System.out.println("desc" + Arrays.toString(descSort(array)));
     }
 
-    public static int[] ascSort(int[] array) {
+    public static Integer[] ascSort(Integer[] array) {
         for (int i = 0; i < array.length; i++) {
             for (int j = i + 1; j < array.length; j++) {
                 if (array[i] > array[j]) {
-                    int temp = array[j];
-                    array[j] = array[i];
-                    array[i] = temp;
+                    SortUtils.exch(array, i, j);
                 }
             }
         }
         return array;
     }
 
-    public static int[] descSort(int[] array) {
+    public static Integer[] descSort(Integer[] array) {
         for (int i = 0; i < array.length; i++) {
             for (int j = i + 1; j < array.length; j++) {
                 if (array[i] < array[j]) {
-                    int temp = array[j];
-                    array[j] = array[i];
-                    array[i] = temp;
+                    SortUtils.exch(array, i, j);
                 }
             }
         }
