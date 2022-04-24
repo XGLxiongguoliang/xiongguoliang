@@ -1,5 +1,7 @@
 package com.example.network.utils.xcpparser;
 
+import com.example.network.utils.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -12,23 +14,24 @@ public class XcpFilterImpl implements XcpFilter {
 
     private String text;
 
-    public final static String[] REXS = {"/*.*/", "//.*"};
+    public final static String[] REXS = {"/\\*{1,2}[\\s\\S]*?\\*/", "//[\\s\\S]*?\\n"};
 
     // 读取xcp文档返回字符串
-    public XcpFilterImpl(File file) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader(file));
+    public XcpFilterImpl(String fileUrl) throws IOException {
+        // 获取文件的字符流
+        BufferedReader bufferedReader =  FileUtils.getBufferedReader(fileUrl, "a2l");
         StringBuffer buff = new StringBuffer();
         String temp;
-        while ((temp = in.readLine()) != null) {
+        while ((temp = bufferedReader.readLine()) != null) {
             buff.append(temp);
         }
-        in.close();
+        bufferedReader.close();
         text = buff.toString().trim();
     }
 
     @Override
     public String filter() {
-        return null;
+        return filter(REXS);
     }
 
     @Override

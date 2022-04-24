@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -18,8 +19,28 @@ public class XcpNode implements Serializable {
     private String noSonNodeContext;
 
     // 该节点下的子节点对象集合
-    private List<XcpNode> childNodes = new ArrayList<>();
+    private List<XcpNode> childNodes = new LinkedList<>();
 
     public XcpNode() {
+    }
+
+    // 输出完整的节点字符串也用到了递归
+    @Override
+    public String toString() {
+        if (childNodes.isEmpty() && noSonNodeContext == null) {
+            return title + "\n" + "/end " + name;
+        } else if (childNodes.isEmpty() && noSonNodeContext != null) {
+            return title + "\n" + noSonNodeContext + "\n" + "/end " + name;
+        } else {
+            StringBuffer buff = new StringBuffer();
+            if (!noSonNodeContext.isEmpty()) {
+                buff.append(noSonNodeContext + "\n");
+            }
+            for (XcpNode n : childNodes) {
+                buff.append(n.toString());
+            }
+            buff.append("/end" + name);
+            return buff.toString();
+        }
     }
 }

@@ -15,16 +15,10 @@ public class XcpNodeBuilder {
     private XcpFilter xcpFilter;
     // xcp文件解析器
     private XcpParser xcpParser;
-    // xcp文件的全量内容
-    private String fileContext;
-    // 文件字节流
-    private BufferedReader bufferedReader;
 
-    public XcpNodeBuilder(XcpFilter xcpFilter, XcpParser xcpParser, BufferedReader bufferedReader, String fileContext) {
+    public XcpNodeBuilder(XcpParser xcpParser, XcpFilter xcpFilter) {
         this.xcpFilter = xcpFilter;
         this.xcpParser = xcpParser;
-        this.bufferedReader = bufferedReader;
-        this.fileContext = fileContext;
     }
 
     // 获取父节点
@@ -43,7 +37,7 @@ public class XcpNodeBuilder {
 
     // 设置节点标题
     private void buildNodeTitle(String str, XcpNode n) {
-        Pattern p = Pattern.compile("/begin\\s+\\s+(.*)/end\\s+\\S+");
+        Pattern p = Pattern.compile("/begin\\s+\\S+(.*)/end\\s+\\S+", Pattern.DOTALL);
         Matcher m = p.matcher(str);
         List<String> childrenDocs = xcpParser.parser(str);
         if (m.find()) {
@@ -56,63 +50,49 @@ public class XcpNodeBuilder {
     }
 
     // 设置节点名称
-    private void buildNodeNode(String str, XcpNode n) {
+    private void buildNodeName(String str, XcpNode n) {
+        Pattern p = Pattern.compile("/begin.*?/end\\s+\\S+", Pattern.DOTALL);
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            String temp = m.group();
+            String s = temp.substring(1, temp.length() - 1).split(" ")[0];
+            if (s.endsWith("/end\\s+\\S+")) {
+                n.setTitle(s.substring(0, s.length() - 1));
+            } else {
+                n.setTitle(s.split(" ")[0]);
+            }
+        }
     }
 
     // 设置节点内容,节点的内容是删除了所有子节点以后剩下的部分
     private void buildNodeContext(String str, XcpNode n) {
-        n.setAllContext(str);
+
+        Pattern p = Pattern.compile("/begin(.*)/end\\s+\\S+", Pattern.DOTALL);
+        Matcher m = p.matcher(str);
+        List<String> childrenDocs = xcpParser.parser(str);
+        if (m.find()) {
+            String temp = m.group(1);
+            for (String s : childrenDocs) {
+                temp = temp.replaceAll(s, "");
+            }
+            n.setAllContext(str);
+        }
     }
 
     // 通过递归生成完整节点树
     private void buildNodeTree(String str, XcpNode n) {
-        // 读取并解析每行数据
-        String line;
-        try {
-            // 读取并解析每行数据
-            while ((line = bufferedReader.readLine()) != null) {
-                System.out.println("读取行的数据   ************   " + line);
-
-                // 正则匹配"/begin name"标签
-                Pattern p = Pattern.compile("/begin\\s+\\S+.*");
-                Matcher m = p.matcher(line);
-
-                // 如果匹配到"/begin name"标签，则重新匹配"/begin name"到"/end name"(相同name)之间的完整内容
-                String fatherName;
-
-                if (m.find()) {
-
-                    String nodeTitle = line;
-
-                    // 去除标签行的前后空格，方便后续做正则匹配
-                    line = line.trim();
-
-                    Pattern p2 = Pattern.compile("\\s+");
-                    fatherName = p2.split(line)[1];
-                    System.out.println("标签节点的名称   ************   " + line);
-
-                    // 构造父节点的基本信息并递归解析文本内容中的子节点,并将子节点存入到父节点下
-                    Pattern pFather = Pattern.compile("/begin\\s+" + fatherName + "\\s+.*" + "/end" + "\\s+" + fatherName, Pattern.DOTALL);
-                    Matcher mFather = pFather.matcher(fileContext);
-
-                    System.out.println("匹配节点   " + pFather.pattern() + "   范围中的内容   ************   " );
-
-                    // 匹配父节点及节点内的所有内容
-                    if (mFather.find()) {
-                        String fatherContext = mFather.group(0);
-
-                        n.setTitle(nodeTitle);
-                        n.setName(fatherName);
-                        n.setAllContext(fatherContext);
-
-                        System.out.println("YES匹配节点   " + pFather.pattern() + "   范围中的内容   ************   \r\n" + fatherContext);
-                    } else {
-                        System.out.println("NO匹配节点   " + pFather.pattern() + "   范围中的内容" );
-                    }
-                }
+        buildNodeTitle(str, n);
+        buildNodeContext(str, n);
+        // 如果存在子节点则继续下面的操作
+        if (!xcpParser.parser(str).isEmpty()) {
+            // 对每一个子节点都应该继续调用直到递归结束
+            for (String temp : xcpParser.parser(str)) {
+                XcpNode child = new XcpNode();
+                buildNodeTitle(temp, child);
+                buildNodeContext(temp, child);
+                n.getChildNodes().add(child);
+                buildNodeTree(temp, child);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

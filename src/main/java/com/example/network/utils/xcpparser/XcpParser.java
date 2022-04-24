@@ -12,11 +12,4 @@ public interface XcpParser {
      * @return
      */
     List<String> parser(String str);
-
-    /**
-     * 通过xcp文件地址 ，解析xcp文件
-     * @param xcpFileUrl
-     * @return
-     */
-    //String parseXcpFile(String xcpFileUrl, String fileNameSuffix);
 }
