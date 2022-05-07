@@ -2,13 +2,16 @@ package com.example.network.service.impl;
 
 import com.example.network.common.PageObject;
 import com.example.network.domain.UserInfo;
+import com.example.network.kafka.KafkaProducer;
 import com.example.network.mapper.UserMapper;
 import com.example.network.service.UserService;
+import com.example.network.utils.DateUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +38,9 @@ public class UserServiceImpl implements UserService {
         pageObject.setPageCurrent(pageInfo.getPageNum());
         pageObject.setPageSize(pageInfo.getPageSize());
         pageObject.setRecords(userList);
+
+        KafkaProducer kafkaProducer = new KafkaProducer();
+        kafkaProducer.pushMessage("查询啦哈哈哈--- " + DateUtils.dateToString(new Date()));
 
         return pageObject;
     }
