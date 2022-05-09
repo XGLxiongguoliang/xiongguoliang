@@ -4,10 +4,12 @@ import com.example.network.common.PageObject;
 import com.example.network.domain.UserInfo;
 import com.example.network.kafka.KafkaProducer;
 import com.example.network.mapper.UserMapper;
+import com.example.network.service.KafkaService;
 import com.example.network.service.UserService;
 import com.example.network.utils.DateUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,15 @@ import java.util.List;
  * @auther Mr.Xiong
  * @create 2020-03-07 13:10
  */
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private KafkaService kafkaService;
 
     @Override
     public PageObject<UserInfo> queryPageList(PageObject<UserInfo> pageObject) {
@@ -39,8 +45,7 @@ public class UserServiceImpl implements UserService {
         pageObject.setPageSize(pageInfo.getPageSize());
         pageObject.setRecords(userList);
 
-        KafkaProducer kafkaProducer = new KafkaProducer();
-        kafkaProducer.pushMessage("查询啦哈哈哈--- " + DateUtils.dateToString(new Date()));
+        kafkaService.sendMessage(null, null);
 
         return pageObject;
     }
