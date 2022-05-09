@@ -7,6 +7,7 @@ import com.example.network.mapper.UserMapper;
 import com.example.network.service.KafkaService;
 import com.example.network.service.UserService;
 import com.example.network.utils.DateUtils;
+import com.example.network.utils.ExcelUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -77,5 +78,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfo queryUserByAccount(String username) {
         return userMapper.queryUserByAccount(username);
+    }
+
+    public String exportUserList() {
+        List<UserInfo> userInfoList = userMapper.queryAll();
+        return "";
     }
 }

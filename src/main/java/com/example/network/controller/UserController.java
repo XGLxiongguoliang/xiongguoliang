@@ -56,5 +56,13 @@ public class UserController {
 
         return 1;
     }
+
+    @ResponseBody
+    @RequestMapping("/exportUserList")
+    public String exportUserList() {
+        String fileUrl = userService.exportUserList();;
+
+        return fileUrl;
+    }
 }
 

@@ -27,4 +27,6 @@ public interface UserService {
     UserInfo authUser(UserInfo user);
 
     UserInfo queryUserByAccount(String username);
+
+    String exportUserList();
 }
