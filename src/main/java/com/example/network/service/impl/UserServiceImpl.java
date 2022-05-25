@@ -2,19 +2,18 @@ package com.example.network.service.impl;
 
 import com.example.network.common.PageObject;
 import com.example.network.domain.UserInfo;
-import com.example.network.kafka.KafkaProducer;
 import com.example.network.mapper.UserMapper;
 import com.example.network.service.KafkaService;
 import com.example.network.service.UserService;
-import com.example.network.utils.DateUtils;
-import com.example.network.utils.ExcelUtils;
+import com.example.network.utils.ExcelSheet;
+import com.example.network.utils.ExcelUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,6 +81,27 @@ public class UserServiceImpl implements UserService {
 
     public String exportUserList() {
         List<UserInfo> userInfoList = userMapper.queryAll();
-        return "";
+        List<List<Object>> listTemp = new ArrayList<>();
+        userInfoList.forEach(n -> {
+            List<Object> objectList = new ArrayList<>();
+            objectList.add(n.getName());
+            objectList.add(n.getAge());
+            objectList.add(n.getUsername());
+            listTemp.add(objectList);
+        });
+
+        ExcelUtil excelUtil = new ExcelUtil();
+        String[] headers = { "姓名", "年龄", "用户名" };
+        String sheetName = "用户列表";
+
+        String userHome = System.getProperties().getProperty("user.home");
+
+        String filePath = userHome + sheetName + "_" + System.currentTimeMillis() + ".xlsx";
+
+        log.info("filePath---{}", filePath);
+
+        excelUtil.exportExcel(headers, listTemp, filePath);
+
+        return filePath;
     }
 }

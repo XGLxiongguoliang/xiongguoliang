@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Log4j2
-public class ExcelUtils<T> {
+public class ExcelUtilsBack<T> {
     /**
      *  2007 版本以上 最大支持1048576行
      */
@@ -44,7 +44,7 @@ public class ExcelUtils<T> {
      */
     private String uploadUrl;
 
-    public ExcelUtils(String url) {
+    public ExcelUtilsBack(String url) {
         this.uploadUrl = url;
     }
 
