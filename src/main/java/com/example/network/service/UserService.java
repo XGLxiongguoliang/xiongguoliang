@@ -4,6 +4,8 @@ import com.example.network.common.PageObject;
 import com.example.network.domain.UserInfo;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -28,5 +30,5 @@ public interface UserService {
 
     UserInfo queryUserByAccount(String username);
 
-    String exportUserList();
+    void exportUserList(HttpServletResponse response) throws IOException;
 }

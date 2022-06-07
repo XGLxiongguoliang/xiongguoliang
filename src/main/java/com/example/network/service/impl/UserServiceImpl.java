@@ -10,9 +10,14 @@ import com.example.network.utils.ExcelUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,29 +84,28 @@ public class UserServiceImpl implements UserService {
         return userMapper.queryUserByAccount(username);
     }
 
-    public String exportUserList() {
+    public void exportUserList(HttpServletResponse response) throws IOException {
         List<UserInfo> userInfoList = userMapper.queryAll();
-        List<List<Object>> listTemp = new ArrayList<>();
+
+        List<List<String>> listTemp = new ArrayList<>();
+        List<String> headerList = new ArrayList<>();
+        headerList.add("姓名");
+        headerList.add("年龄");
+        headerList.add("用户名");
+        listTemp.add(headerList);
+
         userInfoList.forEach(n -> {
-            List<Object> objectList = new ArrayList<>();
+            List<String> objectList = new ArrayList<>();
             objectList.add(n.getName());
-            objectList.add(n.getAge());
+            objectList.add(n.getAge() + "");
             objectList.add(n.getUsername());
             listTemp.add(objectList);
         });
 
         ExcelUtil excelUtil = new ExcelUtil();
-        String[] headers = { "姓名", "年龄", "用户名" };
-        String sheetName = "用户列表";
+        String sheetName = "sheet1";
+        String fileName = "用户列表";
 
-        String userHome = System.getProperties().getProperty("user.home");
-
-        String filePath = userHome + sheetName + "_" + System.currentTimeMillis() + ".xlsx";
-
-        log.info("filePath---{}", filePath);
-
-        excelUtil.exportExcel(headers, listTemp, filePath);
-
-        return filePath;
+        excelUtil.exportExcel(response, listTemp, sheetName, fileName, 3);
     }
 }

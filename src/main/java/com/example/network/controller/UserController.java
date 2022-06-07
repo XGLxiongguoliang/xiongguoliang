@@ -6,6 +6,8 @@ import com.example.network.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -59,10 +61,8 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping("/exportUserList")
-    public String exportUserList() {
-        String fileUrl = userService.exportUserList();;
-
-        return fileUrl;
+    public void exportUserList(HttpServletResponse response) throws IOException {
+        userService.exportUserList(response);;
     }
 }
 
