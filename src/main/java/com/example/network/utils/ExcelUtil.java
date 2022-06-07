@@ -32,7 +32,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -670,37 +670,32 @@ public class ExcelUtil {
      * @param excelData Excel表格的数据，封装为List<List<String>>
      * @param sheetName sheet的名字
      * @param fileName 导出Excel的文件名
-     * @param columnWidth Excel表格的宽度，建议为15
      * @throws IOException 抛IO异常
      */
-    public static void exportExcel(HttpServletResponse response,
-                                   List<List<String>> excelData,
-                                   String sheetName,
-                                   String fileName,
-                                   int columnWidth) throws IOException {
+    public static void exportExcel(HttpServletResponse response, List<List<String>> excelData, String sheetName, String fileName) throws IOException {
 
-        //声明一个工作簿
-        HSSFWorkbook workbook = new HSSFWorkbook();
+        //声明一个工作簿 HSSFWorkbook(97~2003版本) XSSFWorkbook(2003以上版本)
+        Workbook workbook = new XSSFWorkbook();
 
         //生成一个表格，设置表格名称
-        HSSFSheet sheet = workbook.createSheet(sheetName);
+        Sheet sheet = workbook.createSheet(sheetName);
 
         //设置表格列宽度
-        sheet.setDefaultColumnWidth(columnWidth);
+        sheet.setDefaultColumnWidth(15);
 
         //写入List<List<String>>中的数据
         int rowIndex = 0;
         for(List<String> data : excelData){
             //创建一个row行，然后自增1
-            HSSFRow row = sheet.createRow(rowIndex++);
+           Row row = sheet.createRow(rowIndex++);
 
             //遍历添加本行数据
             for (int i = 0; i < data.size(); i++) {
                 //创建一个单元格
-                HSSFCell cell = row.createCell(i);
+                Cell cell = row.createCell(i);
 
                 //创建一个内容对象
-                HSSFRichTextString text = new HSSFRichTextString(data.get(i));
+                XSSFRichTextString text = new XSSFRichTextString(data.get(i));
 
                 //将内容对象的文字内容写入到单元格中
                 cell.setCellValue(text);
@@ -709,8 +704,8 @@ public class ExcelUtil {
 
         //准备将Excel的输出流通过response输出到页面下载
         //八进制输出流
-        response.setContentType("application/vnd.ms-excel;charset=utf-8"); // .xls 用这个
-        //response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");  // .xlsx 用这个
+        //response.setContentType("application/vnd.ms-excel;charset=utf-8"); // .xls 用这个
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");  // .xlsx 用这个
 
         //设置导出Excel的名称
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");

@@ -106,6 +106,6 @@ public class UserServiceImpl implements UserService {
         String sheetName = "sheet1";
         String fileName = "用户列表";
 
-        excelUtil.exportExcel(response, listTemp, sheetName, fileName, 3);
+        excelUtil.exportExcel(response, listTemp, sheetName, fileName);
     }
 }
