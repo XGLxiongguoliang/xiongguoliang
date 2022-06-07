@@ -50,7 +50,12 @@ public class UserServiceImpl implements UserService {
         pageObject.setPageSize(pageInfo.getPageSize());
         pageObject.setRecords(userList);
 
-        kafkaService.sendMessage(null, null);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                kafkaService.sendMessage(null, null);
+            }
+        }).start();
 
         return pageObject;
     }

@@ -15,8 +15,10 @@ import java.util.Optional;
 @Slf4j
 @Component
 public class KafkaConsumer {
-    @KafkaListener(topics = KafkaProducer.TOPIC_TEST,groupId = KafkaProducer.TOPIC_GROUP)
-    public void consumerGroup1(ConsumerRecord<?, ?> record, Acknowledgment ack, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic){
+    @KafkaListener(topics = KafkaProducer.TOPIC_TEST, groupId = KafkaProducer.TOPIC_GROUP)
+    public void consumerGroup1(ConsumerRecord<?, ?> record,
+                               //Acknowledgment ack,
+                               @Header(KafkaHeaders.RECEIVED_TOPIC) String topic){
         String dateTime = DateUtils.dateToString(new Date());
         log.info("group接收到消息时间：{}", dateTime);
         Optional message = Optional.ofNullable(record.value());
@@ -24,7 +26,7 @@ public class KafkaConsumer {
             Object msg = message.get();
             log.info("consumerGroup 消费了： Topic:" + topic + ",Message:" + msg);
             //手动提交偏移量
-            ack.acknowledge();
+            //ack.acknowledge();
         }
     }
 }

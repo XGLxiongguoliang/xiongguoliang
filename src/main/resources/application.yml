@@ -50,6 +50,10 @@ spring:
       auto-offset-reset: earliest
       # 是否自动提交偏移量，默认值是true,为了避免出现重复数据和数据丢失，可以把它设置为false,然后手动提交偏移量
       enable-auto-commit: false
+      # 当enable-auto-commit为false时生效
+      #listener:
+        ## 手动提交ack offset模式
+        #ack-mode: manual_immediate
       # 键的反序列化方式
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       # 值的反序列化方式

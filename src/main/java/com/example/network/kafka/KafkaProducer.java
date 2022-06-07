@@ -26,7 +26,7 @@ public class KafkaProducer {
     /**
      * 组别1
      */
-    public static final String TOPIC_GROUP = "group";
+    public static final String TOPIC_GROUP = "testGroup";
 
     public void pushMessage(String message){
         log.info("准备发送消息信息：{}", message);
