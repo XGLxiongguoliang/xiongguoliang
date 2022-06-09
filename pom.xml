@@ -107,6 +107,13 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.17</version>
         </dependency>
+        <!-- csv文件解析依赖 -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>

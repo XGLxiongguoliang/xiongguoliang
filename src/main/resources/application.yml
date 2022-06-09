@@ -59,7 +59,12 @@ spring:
       # 值的反序列化方式
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       bootstrap-servers: 8.140.139.185:9092
-
+  servlet:
+    multipart:
+      # maxFileSize 单个数据大小
+      maxFileSize: 10MB
+      # maxRequestSize 是总数据大小
+      maxRequestSize: 1024MB
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
   type-aliases-package: com.example.network.domain

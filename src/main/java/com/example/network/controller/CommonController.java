@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @program com.example.demo.controller
@@ -25,5 +26,10 @@ public class CommonController {
         commonService.uploadFile();
     }
 
+    @ResponseBody
+    @RequestMapping("/importCSV")
+    public void importCSV(MultipartFile file) {
+        commonService.importCSV(file);
+    }
 }
 
