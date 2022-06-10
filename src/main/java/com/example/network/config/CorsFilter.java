@@ -29,7 +29,7 @@ public class CorsFilter implements Filter {
         // 允许http://www.xxx.com域（自行设置，这里只做示例）发起跨域请求
         res.addHeader("Access-Control-Allow-Origin", "*");
         // 设置允许跨域请求的方法
-        res.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+        res.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS");
         // 允许跨域请求包含content-type
         res.addHeader("Access-Control-Allow-Headers", "Content-Type,X-CAF-Authorization-Token,sessionToken,X-TOKEN");
         // Preflighted Request在发送真正的请求前, 会先发送一个方法为OPTIONS的预请求(Preflighted Request), 用于试探服务端是否能接受真正的请求.

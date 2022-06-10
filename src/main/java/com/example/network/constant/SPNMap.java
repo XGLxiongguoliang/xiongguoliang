@@ -1,7 +1,4 @@
-package com.example.network.enums;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
+package com.example.network.constant;
 
 import java.util.HashMap;
 import java.util.Map;

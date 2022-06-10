@@ -1,6 +1,6 @@
 package com.example.network.utils;
 
-import com.example.network.enums.SPNMap;
+import com.example.network.constant.SPNMap;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.bean.CsvToBean;
