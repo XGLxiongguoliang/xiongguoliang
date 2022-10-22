@@ -22,13 +22,20 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+
+        //key序列化
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        // 使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
-        GenericJackson2JsonRedisSerializer jackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        //value序列化
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        //hash类型key序列化
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        //hash类型value序列化
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+        //注入连接工厂
         redisTemplate.setConnectionFactory(redisConnectionFactory);
+
         return redisTemplate;
     }
 }

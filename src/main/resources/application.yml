@@ -59,6 +59,20 @@ spring:
       # 值的反序列化方式
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       bootstrap-servers: 8.140.139.185:9092
+  redis:
+    host: 8.140.139.185
+    port: 6379
+    password: 12345
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        min-idle: 0
+    jedis:
+      pool:
+        min-idle: 0
+    timeout: 30000
+    database: 0
   servlet:
     multipart:
       # maxFileSize 单个数据大小
