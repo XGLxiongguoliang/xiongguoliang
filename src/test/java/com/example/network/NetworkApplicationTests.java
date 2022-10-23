@@ -2,6 +2,8 @@ package com.example.network;
 
 import com.example.network.service.UserRelationService;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,6 +19,9 @@ class NetworkApplicationTests {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    RedissonClient redissonClien;
 
     @Test
     void contextLoads() {
@@ -58,11 +63,91 @@ class NetworkApplicationTests {
 //        redisTemplate.opsForList().rightPush("list", "n");
 //        redisTemplate.opsForList().rightPush("list", "g");
 
-        redisTemplate.opsForList().rightPop("list");
-        redisTemplate.opsForList().rightPop("list");
-        redisTemplate.opsForList().rightPop("list");
-        redisTemplate.opsForList().rightPop("list");
-        redisTemplate.opsForList().rightPop("list");
+//        redisTemplate.opsForList().rightPush("list", "x");
 
+        System.out.println(redisTemplate.opsForList().size("list"));
+        System.out.println(redisTemplate.opsForList().index("list", 0));
+        System.out.println(redisTemplate.opsForList().index("list", 1));
+        System.out.println(redisTemplate.opsForList().index("list", 2));
+        System.out.println(redisTemplate.opsForList().index("list", 3));
+        System.out.println(redisTemplate.opsForList().index("list", 4));
+
+        System.out.println(redisTemplate.opsForList().range("list", 0, -1));
+
+//        redisTemplate.opsForList().rightPop("list");
+//        redisTemplate.opsForList().rightPop("list");
+//        redisTemplate.opsForList().rightPop("list");
+//        redisTemplate.opsForList().rightPop("list");
+//        redisTemplate.opsForList().rightPop("list");
+
+    }
+
+    @Test
+    void operateSetRedis() {
+//        redisTemplate.opsForSet().add("set", "1", "2", "1", "3", "4");
+
+        System.out.println(redisTemplate.opsForSet().members("set"));
+        System.out.println(redisTemplate.opsForSet().isMember("set", "1"));
+    }
+
+    @Test
+    void operateZSetRedis() {
+        redisTemplate.opsForZSet().add("zset", "x", 1);
+        redisTemplate.opsForZSet().add("zset", "i", 1);
+        redisTemplate.opsForZSet().add("zset", "o", 1);
+        redisTemplate.opsForZSet().add("zset", "n", 1);
+        redisTemplate.opsForZSet().add("zset", "g", 1);
+
+        System.out.println(redisTemplate.opsForZSet().popMax("zset"));
+    }
+
+    @Test
+    void operateMapRedis() {
+//        redisTemplate.opsForHash().put("hash", "x", "x");
+//        redisTemplate.opsForHash().put("hash", "i", "i");
+//        redisTemplate.opsForHash().put("hash", "o", "o");
+//        redisTemplate.opsForHash().put("hash", "n", "n");
+//        redisTemplate.opsForHash().put("hash", "g", "g");
+//
+//        redisTemplate.opsForHash().delete("hash", "xiong");
+
+        System.out.println(redisTemplate.opsForHash().entries("hash"));
+        System.out.println(redisTemplate.opsForHash().keys("hash"));
+        System.out.println(redisTemplate.opsForHash().get("hash", "g"));
+    }
+
+    @Test
+    void operateRedisson() {
+        RLock lock = redissonClien.getLock("redisson-test-xgl");
+        System.out.println(Thread.currentThread().getName() + "---get lock ... start");
+        if (!lock.tryLock()) {
+            System.out.println(Thread.currentThread().getName() + "---获取锁失败---锁被锁着的");
+        } else {
+            try {
+                lock.lock();
+                System.out.println(Thread.currentThread().getName() + "---获取到锁");
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                System.out.println(Thread.currentThread().getName() + "---准备释放锁");
+                lock.unlock();
+                System.out.println(Thread.currentThread().getName() + "---释放锁");
+            }
+        }
+    }
+
+    @Test
+    void operateMoreThread() {
+        for (int i = 0; i < 100; i++) {
+            Integer count = i;
+            new Thread() {
+                @Override
+                public void run() {
+                    Thread.currentThread().setName("name---" + count);
+                    System.out.println(Thread.currentThread().getName() + "---线程开启");
+                    operateRedisson();
+                }
+            }.start();
+        }
     }
 }
