@@ -117,7 +117,21 @@ class NetworkApplicationTests {
     }
 
     @Test
-    void operateRedisson() {
+    void operateMoreThread() {
+        for (int i = 0; i < 100; i++) {
+            Integer count = i;
+            new Thread() {
+                @Override
+                public void run() {
+                    Thread.currentThread().setName("name---" + count);
+                    System.out.println(Thread.currentThread().getName() + "---线程开启");
+                    operateRedisson();
+                }
+            }.start();
+        }
+    }
+
+    private void operateRedisson() {
         RLock lock = redissonClien.getLock("redisson-test-xgl");
         System.out.println(Thread.currentThread().getName() + "---get lock ... start");
         if (!lock.tryLock()) {
@@ -133,21 +147,6 @@ class NetworkApplicationTests {
                 lock.unlock();
                 System.out.println(Thread.currentThread().getName() + "---释放锁");
             }
-        }
-    }
-
-    @Test
-    void operateMoreThread() {
-        for (int i = 0; i < 100; i++) {
-            Integer count = i;
-            new Thread() {
-                @Override
-                public void run() {
-                    Thread.currentThread().setName("name---" + count);
-                    System.out.println(Thread.currentThread().getName() + "---线程开启");
-                    operateRedisson();
-                }
-            }.start();
         }
     }
 }
